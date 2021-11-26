@@ -30,6 +30,10 @@
   register: nopasswd_check
   ignore_errors: yes
 
+- name: Nopasswd connection check results
+  debug:
+    var: nopasswd_check
+
 - name: Update MariaDB root password
   mysql_user: 
     name: root
@@ -41,6 +45,7 @@
     - ::1
     - localhost
   when: nopasswd_check.failed == false
+
 
 - name: Allow remote hosts to connect
   lineinfile:
