@@ -1,0 +1,38 @@
+---
+- name: install mariadb
+  hosts:
+  - db
+  tasks:
+
+  - include_role:
+      name: mariadb
+      tasks_from: install
+
+  - include_role:
+      name: mariadb
+      tasks_from: create_database
+    vars:
+      db_name: 
+      - auth
+      - world
+      - characters
+
+  - include_role:
+      name: mariadb
+      tasks_from: create_user
+
+  - include_role:
+      name: mariadb
+      tasks_from: user_grant_priveleges
+    vars:
+      db_name: '{{ item }}'
+    loop:
+      - auth
+      - world
+      - characters
+
+
+  vars_files:
+    ../varfile.yaml
+  become: yes
+

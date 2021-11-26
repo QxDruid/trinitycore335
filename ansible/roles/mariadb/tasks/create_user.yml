@@ -1,0 +1,9 @@
+---
+- name: Create database user with name 'db_user' and password 'db_user_password' with all database privileges
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: "{{ db_root_password }}"
+    host: "%"
+    name: "{{ db_user }}"
+    password: "{{ db_user_password }}"
+    state: present

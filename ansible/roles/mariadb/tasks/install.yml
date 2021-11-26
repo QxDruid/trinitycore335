@@ -1,0 +1,57 @@
+---
+- name: install PIP3
+  apt: 
+    name: "python3-pip"
+    update_cache: yes
+    state: present
+
+- name: Pip install PyMySQL
+  pip:
+    name: PyMySQL
+    state: present
+
+- name: Install
+  apt: 
+    name: "{{ item }}"
+    state: present
+  loop:
+    - mariadb-server
+
+- name: Start mariadb
+  systemd:
+      name: mariadb
+      state: started
+      enabled: yes
+
+- name: Try to connect mysql without password
+  mysql_user: 
+    name: root
+    check_implicit_admin: yes
+  register: nopasswd_check
+  ignore_errors: yes
+
+- name: Update MariaDB root password
+  mysql_user: 
+    name: root
+    host: "{{ item }}"
+    password: "{{ db_root_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost
+  when: nopasswd_check.failed == false
+
+- name: Allow remote hosts to connect
+  lineinfile:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    backrefs: yes
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
+    state: present
+  
+- name: restart mariadb
+  systemd:
+    name: mariadb
+    state: restarted
+

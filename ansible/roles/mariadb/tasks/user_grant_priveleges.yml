@@ -1,0 +1,11 @@
+---
+- name: grant to 'db_user' all database privileges to 'db_name'
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: "{{ db_root_password }}"
+    name: "{{ db_user }}"
+    update_password: on_create
+    host: '%'
+    append_privs: yes
+    priv: '{{ db_name }}.*:ALL'
+    state: present
