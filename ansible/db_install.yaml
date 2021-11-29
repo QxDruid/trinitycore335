@@ -2,8 +2,8 @@
 - name: install mariadb
   hosts:
   - db
-  tasks:
 
+  tasks:
   - include_role:
       name: mariadb
       tasks_from: install

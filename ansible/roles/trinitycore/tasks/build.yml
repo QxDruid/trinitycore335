@@ -1,0 +1,62 @@
+---
+- name: install PIP3
+  apt: 
+    name: "python3-pip"
+    update_cache: yes
+    state: present
+
+- name: Install build deps
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - git 
+  - clang 
+  - cmake 
+  - make 
+  - gcc 
+  - g++ 
+  - libmariadbclient-dev 
+  - libssl-dev 
+  - libbz2-dev 
+  - libreadline-dev 
+  - libncurses-dev 
+  - libboost-all-dev  
+  - p7zip 
+  - libmariadb-client-lgpl-dev-compat
+
+- name: Add trinity server user
+  ansible.builtin.user:
+    name: trinity
+    password: "{{ trinity_user_password }}"
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+
+- name: Clone Trinitycore 3.3.5 src from git
+  ansible.builtin.git:
+    repo: git://github.com/TrinityCore/TrinityCore.git 
+    dest: /home/vagrant/TrinityCore
+    single_branch: yes
+    version:  "3.3.5"
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: ~/TrinityCore/build
+    state: directory
+    mode: '0777'
+
+- name: Run CMAKE
+  ansible.builtin.command:
+    chdir: ~/TrinityCore/build
+    cmd: cmake ../ -DCMAKE_INSTALL_PREFIX=/home/$USER/server
+
+- name: Run make -j $(nproc) 
+  ansible.builtin.command:
+    chdir: ~/TrinityCore/build
+    cmd: make -j $(nproc) 
+
+- name: Run make install
+  ansible.builtin.command:
+    chdir: ~/TrinityCore/build
+    cmd: make install

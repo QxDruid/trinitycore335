@@ -1,0 +1,13 @@
+---
+- name: Build trinitycore
+  hosts:
+  - build
+  
+  tasks:
+  - include_role:
+      name: trinitycore
+      tasks_from: build
+      
+  vars_files:
+    ../varfile.yaml
+  become: yes
