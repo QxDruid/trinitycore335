@@ -24,3 +24,5 @@ override.tf.json
 .vagrant/*
 varfile.*
 hosts.*
+
+artifacts/*

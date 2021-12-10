@@ -42,21 +42,57 @@
 
 - name: Create a directory if it does not exist
   ansible.builtin.file:
-    path: ~/TrinityCore/build
+    path: /home/vagrant/TrinityCore/build
     state: directory
     mode: '0777'
 
 - name: Run CMAKE
   ansible.builtin.command:
-    chdir: ~/TrinityCore/build
-    cmd: cmake ../ -DCMAKE_INSTALL_PREFIX=/home/$USER/server
+    chdir: /home/vagrant/TrinityCore/build
+    cmd: cmake ../ -DCMAKE_INSTALL_PREFIX=/home/vagrant/server
+
+- name: register nproc value
+  ansible.builtin.command:
+    cmd: nproc
+  register: cpu_count
 
 - name: Run make -j $(nproc) 
   ansible.builtin.command:
-    chdir: ~/TrinityCore/build
-    cmd: make -j $(nproc) 
+    chdir: /home/vagrant/TrinityCore/build
+    cmd: make -j"{{cpu_count.stdout}}"
 
 - name: Run make install
   ansible.builtin.command:
-    chdir: ~/TrinityCore/build
+    chdir: /home/vagrant/TrinityCore/build
     cmd: make install
+
+- name: register bin files to fetch
+  ansible.builtin.command:
+    chdir: /home/vagrant/server
+    cmd: ls etc/
+  register: etc_files
+
+
+- name: register bin files to fetch
+  ansible.builtin.command:
+    chdir: /home/vagrant/server
+    cmd: ls bin/
+  register: bin_files
+
+- name: fetch builded etc
+  ansible.builtin.fetch:
+    src: "/home/vagrant/server/etc/{{item}}"
+    dest: "{{artifacts_collect_folder}}/etc/"
+    flat: yes
+    validate_checksum: no 
+  with_items: "{{etc_files.stdout_lines}}"
+  become: no
+
+- name: fetch builded bin
+  ansible.builtin.fetch:
+    src: "/home/vagrant/server/bin/{{item}}"
+    dest: "{{artifacts_collect_folder}}/bin/"
+    flat: yes
+    validate_checksum: no 
+  with_items: "{{bin_files.stdout_lines}}"
+  become: no
