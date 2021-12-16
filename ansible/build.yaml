@@ -6,6 +6,10 @@
   tasks:
   - include_role:
       name: trinitycore
+      tasks_from: prepare
+
+  - include_role:
+      name: trinitycore
       tasks_from: build
       
   vars_files:
