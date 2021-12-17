@@ -32,3 +32,9 @@
     chdir: /home/vagrant/TrinityCore/build
     cmd: make install
 
+- name: Remove trinitycore src files to free up space
+  ansible.builtin.file:
+    path: /home/vagrant/TrinityCore
+    state: absent
+
+

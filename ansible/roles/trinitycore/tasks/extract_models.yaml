@@ -2,16 +2,17 @@
   ansible.builtin.copy:
     src: "{{client_folder}}"
     dest: /home/vagrant/
-    owner: trinity
-    group: trinity
+    owner: vagrant
+    group: vagrant
     mode: '0744'
+  become: no
 
-- name: Copy WOW client to extract files
+- name: Copy binaries to extract files
   ansible.builtin.copy:
     src: "/home/vagrant/server/bin/{{item}}"
     dest: /home/vagrant/client/
-    owner: trinity
-    group: trinity
+    owner: vagrant
+    group: vagrant
     mode: '0744'
     remote_src: yes
   with_items:
