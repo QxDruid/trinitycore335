@@ -1,0 +1,31 @@
+- name: Copy WOW client to extract files
+  ansible.builtin.copy:
+    src: "{{client_folder}}"
+    dest: /home/vagrant/
+    owner: trinity
+    group: trinity
+    mode: '0744'
+
+- name: Copy WOW client to extract files
+  ansible.builtin.copy:
+    src: "/home/vagrant/server/bin/{{item}}"
+    dest: /home/vagrant/client/
+    owner: trinity
+    group: trinity
+    mode: '0744'
+    remote_src: yes
+  with_items:
+  - mapextractor
+  - vmap4extractor
+  - vmap4assembler
+  - mmaps_generator
+
+- name: Extract files from client
+  ansible.builtin.command:
+    chdir: /home/vagrant/client
+    cmd: "/home/vagrant/client/{{item}}"
+  with_items:
+  - mapextractor
+  - vmap4extractor
+  - vmap4assembler
+  - mmaps_generator
