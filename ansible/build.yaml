@@ -11,7 +11,15 @@
   - include_role:
       name: trinitycore
       tasks_from: build
-      
+
+  - include_role:
+      name: trinitycore
+      tasks_from: extract_models
+
+  - include_role:
+      name: trinitycore
+      tasks_from: fetch_artifacts
+
   vars_files:
     ../varfile.yaml
   become: yes
