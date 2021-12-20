@@ -2,7 +2,7 @@
 - name: Add trinity server user
   ansible.builtin.user:
     name: trinity
-    password: "{{ trinity_user_password }}"
+    password: "{{ trinity_user_password | password_hash('sha512') }}"
     shell: /bin/bash
     groups: sudo
     append: yes
@@ -15,13 +15,13 @@
     owner: trinity
     group: trinity
   with_items:
-  - /home/trinity/bin/
-  - /home/trinity/etc/
+  - /home/trinity/server/bin/
+  - /home/trinity/server/etc/
 
 - name: Copy authserver binary
   ansible.builtin.copy:
     src: "{{artifacts_collect_folder}}/bin/authserver"
-    dest: /home/trinity/bin/authserver
+    dest: /home/trinity/server/bin/authserver
     owner: trinity
     group: trinity
     mode: '0744'
@@ -29,7 +29,7 @@
 - name: Copy authserver configs
   ansible.builtin.copy:
     src: "{{artifacts_collect_folder}}/etc/authserver.conf.dist"
-    dest: /home/trinity/etc/authserver.conf
+    dest: /home/trinity/server/etc/authserver.conf
     owner: trinity
     group: trinity
     mode: '0744'

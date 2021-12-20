@@ -32,7 +32,7 @@
 - name: Copy extracted files
   ansible.builtin.copy:
     src: "/home/trinity/client/{{item}}/"
-    dest: /home/trinity/bin/
+    dest: /home/trinity/server/bin/
     owner: trinity
     group: trinity
     mode: '0744'

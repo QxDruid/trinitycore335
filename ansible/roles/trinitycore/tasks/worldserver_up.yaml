@@ -15,13 +15,13 @@
     owner: trinity
     group: trinity
   with_items:
-  - /home/trinity/bin/
-  - /home/trinity/etc/
+  - /home/trinity/server/bin/
+  - /home/trinity/server/etc/
 
 - name: Copy worldserver binary
   ansible.builtin.copy:
     src: "{{artifacts_collect_folder}}/bin/worldserver"
-    dest: /home/trinity/bin/
+    dest: /home/trinity/server/bin/
     owner: trinity
     group: trinity
     mode: '0744'
@@ -29,7 +29,7 @@
 - name: Copy worldserver configs
   ansible.builtin.copy:
     src: "{{artifacts_collect_folder}}/etc/worldserver.conf.dist"
-    dest: /home/trinity/etc/worldserver.conf
+    dest: /home/trinity/server/etc/worldserver.conf
     owner: trinity
     group: trinity
     mode: '0744'

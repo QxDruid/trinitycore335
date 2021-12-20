@@ -1,42 +1,19 @@
 ---
-- name: register bin files to fetch
+- name: register etc files to fetch
   ansible.builtin.command:
-    chdir: /home/vagrant/server
+    chdir: /home/trinity/server
     cmd: ls etc/
   register: etc_files
 
 - name: register bin files to fetch
   ansible.builtin.command:
-    chdir: /home/vagrant/server
+    chdir: /home/trinity/server
     cmd: ls bin/
   register: bin_files
 
-- name: register dbc files to fetch
-  ansible.builtin.command:
-    chdir: /home/vagrant/client/
-    cmd: ls "{{item}}/"
-  register: "{{item}}"
-  with_items:
-  - dbc
-  - maps
-  - vmaps
-  - mmaps
-  - Cameras
-
-- name: Debug
-  debug:
-    msg: "{{item}}.stdout_lines"
-  with_items:
-  - dbc
-  - maps
-  - vmaps
-  - mmaps
-  - Cameras
-
-
 - name: fetch builded etc
   ansible.builtin.fetch:
-    src: "/home/vagrant/server/etc/{{item}}"
+    src: "/home/trinity/server/etc/{{item}}"
     dest: "{{artifacts_collect_folder}}/etc/"
     flat: yes
     validate_checksum: no 
@@ -45,21 +22,9 @@
 
 - name: fetch builded bin
   ansible.builtin.fetch:
-    src: "/home/vagrant/server/bin/{{item}}"
+    src: "/home/trinity/server/bin/{{item}}"
     dest: "{{artifacts_collect_folder}}/bin/"
     flat: yes
     validate_checksum: no 
   with_items: "{{bin_files.stdout_lines}}"
   become: no
-
-- name: fetch DBC
-  ansible.builtin.fetch:
-    src: "/home/vagrant/server/etc/{{item}}"
-    dest: "{{artifacts_collect_folder}}/DBC"
-    flat: yes
-    validate_checksum: no 
-  with_items: "{{etc_files.stdout_lines}}"
-  become: no
-
-
-
