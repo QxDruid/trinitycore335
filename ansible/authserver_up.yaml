@@ -1,0 +1,17 @@
+---
+- name: install trinitycore authserver
+  hosts:
+  - authserver
+  
+  tasks:
+  - include_role:
+      name: trinitycore
+      tasks_from: prepare
+
+  - include_role:
+      name: trinitycore
+      tasks_from: authserver_up
+
+  vars_files:
+    ../varfile.yaml
+  become: yes

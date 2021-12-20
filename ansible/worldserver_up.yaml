@@ -1,0 +1,21 @@
+---
+- name: install trinitycore worldserver
+  hosts:
+  - worldserver
+  
+  tasks:
+  - include_role:
+      name: trinitycore
+      tasks_from: prepare
+
+  - include_role:
+      name: trinitycore
+      tasks_from: worldserver_up
+
+  - include_role:
+      name: trinitycore
+      tasks_from: extract_models
+
+  vars_files:
+    ../varfile.yaml
+  become: yes
