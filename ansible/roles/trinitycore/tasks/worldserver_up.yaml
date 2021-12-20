@@ -1,0 +1,36 @@
+---
+- name: Add trinity server user
+  ansible.builtin.user:
+    name: trinity
+    password: "{{ trinity_user_password | password_hash('sha512') }}"
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+
+- name: Create a folders structure
+  ansible.builtin.file:
+    path: "{{item}}"
+    state: directory
+    mode: '0744'
+    owner: trinity
+    group: trinity
+  with_items:
+  - /home/trinity/bin/
+  - /home/trinity/etc/
+
+- name: Copy worldserver binary
+  ansible.builtin.copy:
+    src: "{{artifacts_collect_folder}}/bin/worldserver"
+    dest: /home/trinity/bin/
+    owner: trinity
+    group: trinity
+    mode: '0744'
+
+- name: Copy worldserver configs
+  ansible.builtin.copy:
+    src: "{{artifacts_collect_folder}}/etc/worldserver.conf.dist"
+    dest: /home/trinity/etc/worldserver.conf
+    owner: trinity
+    group: trinity
+    mode: '0744'
+
