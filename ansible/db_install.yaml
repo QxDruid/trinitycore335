@@ -12,7 +12,8 @@
       name: mariadb
       tasks_from: create_database
     vars:
-      db_name: 
+      db_name: '{{ item }}'
+    loop:
       - auth
       - world
       - characters

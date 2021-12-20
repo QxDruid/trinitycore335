@@ -1,6 +1,7 @@
 ---
 - name: Create a new database with name db_name
   community.mysql.mysql_db:
+    login_host: localhost
     login_user: root
     login_password: "{{ db_root_password }}"
     name: "{{ db_name }}"
