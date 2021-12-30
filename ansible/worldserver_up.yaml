@@ -10,6 +10,10 @@
 
   - include_role:
       name: trinitycore
+      tasks_from: add_swap
+
+  - include_role:
+      name: trinitycore
       tasks_from: worldserver_up
 
   - include_role:

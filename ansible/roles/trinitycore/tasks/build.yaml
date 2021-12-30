@@ -2,20 +2,20 @@
 - name: Clone Trinitycore 3.3.5 src from git
   ansible.builtin.git:
     repo: git://github.com/TrinityCore/TrinityCore.git 
-    dest: /home/vagrant/TrinityCore
+    dest: /home/trinity/TrinityCore
     single_branch: yes
     version:  "3.3.5"
 
 - name: Create a directory if it does not exist
   ansible.builtin.file:
-    path: /home/vagrant/TrinityCore/build
+    path: /home/trinity/TrinityCore/build
     state: directory
     mode: '0777'
 
 - name: Run CMAKE
   ansible.builtin.command:
-    chdir: /home/vagrant/TrinityCore/build
-    cmd: cmake ../ -DCMAKE_INSTALL_PREFIX=/home/vagrant/server
+    chdir: /home/trinity/TrinityCore/build
+    cmd: cmake ../ -DCMAKE_INSTALL_PREFIX=/home/trinity/server
 
 - name: register nproc value
   ansible.builtin.command:
@@ -24,17 +24,10 @@
 
 - name: Run make -j $(nproc) 
   ansible.builtin.command:
-    chdir: /home/vagrant/TrinityCore/build
+    chdir: /home/trinity/TrinityCore/build
     cmd: make -j"{{cpu_count.stdout}}"
 
 - name: Run make install
   ansible.builtin.command:
-    chdir: /home/vagrant/TrinityCore/build
+    chdir: /home/trinity/TrinityCore/build
     cmd: make install
-
-- name: Remove trinitycore src files to free up space
-  ansible.builtin.file:
-    path: /home/vagrant/TrinityCore
-    state: absent
-
-

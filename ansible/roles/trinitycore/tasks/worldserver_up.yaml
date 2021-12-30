@@ -18,6 +18,13 @@
   - /home/trinity/server/bin/
   - /home/trinity/server/etc/
 
+- name: Clone Trinitycore 3.3.5 src from git
+  ansible.builtin.git:
+    repo: git://github.com/TrinityCore/TrinityCore.git 
+    dest: /home/trinity/TrinityCore
+    single_branch: yes
+    version:  "3.3.5"
+
 - name: Copy worldserver binary
   ansible.builtin.copy:
     src: "{{artifacts_collect_folder}}/bin/worldserver"
@@ -30,6 +37,14 @@
   ansible.builtin.copy:
     src: "{{artifacts_collect_folder}}/etc/worldserver.conf.dist"
     dest: /home/trinity/server/etc/worldserver.conf
+    owner: trinity
+    group: trinity
+    mode: '0744'
+
+- name: Copy TDB_world* sql
+  ansible.builtin.copy:
+    src: "{{artifacts_collect_folder}}/{{TDB_world_database}}"
+    dest: /home/trinity/server/bin/
     owner: trinity
     group: trinity
     mode: '0744'

@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
     ws.vm.provider "virtualbox" do |vb|
       vb.gui = false
       vb.name = "worldserver"
-      vb.memory = 1024
+      vb.memory = 2048
       vb.cpus = 1
     end
 
