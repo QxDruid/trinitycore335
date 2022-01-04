@@ -1,5 +1,7 @@
 - name: Ensure swap file exists.
   command:  "dd if=/dev/zero of={{ swap_file_path }} bs=1M count={{ swap_file_size_mb }}"
+  args:
+    creates: "{{ swap_file_path }}"
   register: swap_file_create
 
 - name: Set permissions on swap file.
