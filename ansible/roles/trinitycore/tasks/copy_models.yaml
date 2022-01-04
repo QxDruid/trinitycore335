@@ -1,0 +1,13 @@
+- name: Copy extracted files
+  ansible.builtin.copy:
+    src: "{{artifacts_collect_folder}}/{{item}}"
+    dest: /home/trinity/server/bin/
+    owner: trinity
+    group: trinity
+    mode: '0744'
+  with_items:
+  - dbc
+  - maps
+  - vmaps
+  - mmaps
+  - Cameras
